@@ -1,30 +1,24 @@
-# MedPlaner – Patienten- & Medikationsverwaltung
+# MedPlaner – Patient & Medication Management App
 
-Fullstack Webanwendung zur Verwaltung von Patienten und wöchentlichen Medikamentenplänen mit Authentifizierung und geschützten API-Endpunkten.
+Fullstack web application for managing patients and weekly medication schedules. Built with React, Node.js and Express, featuring JWT authentication, protected API routes and CRUD functionality.
 
----
+## Overview
 
-## Projektübersicht
+MedPlaner is a fullstack web application that allows users to create and manage patients as well as medication schedules in a structured weekly view.
 
-MedPlaner ist eine webbasierte Anwendung, mit der Nutzer Patienten anlegen und für jeden Patienten individuelle Medikamentenpläne verwalten können.
+The project focuses on user authentication, protected data access, frontend-backend communication and clean CRUD workflows.
 
-Die Anwendung bietet eine strukturierte Wochenansicht und ermöglicht das Erstellen, Bearbeiten und Löschen von Einträgen in Echtzeit.
+## Key Features
 
- Ziel: Vereinfachung und Strukturierung von Medikationsabläufen.
-
----
-
-## Features
-
-- Benutzerregistrierung & Login (JWT Auth)
-- Patientenverwaltung (CRUD)
-- Wochenplan für Medikamenteneinnahmen
-- Einträge erstellen, bearbeiten, löschen
-- Filter & Sortierung von Daten
-- Fehler- und Statusmeldungen im UI
-- Zugriff nur auf eigene Daten (geschützte API)
-
----
+- User registration and login
+- JWT-based authentication
+- Protected API routes
+- Patient management (create, edit, delete)
+- Weekly medication schedule management
+- Create, update and delete medication entries
+- Filter and sorting functionality
+- User-specific data access
+- Error and success feedback in the UI
 
 ## Tech Stack
 
@@ -37,34 +31,35 @@ Die Anwendung bietet eine strukturierte Wochenansicht und ermöglicht das Erstel
 ### Backend
 - Node.js
 - Express
-- JWT (Authentifizierung)
-- bcrypt (Passwort-Hashing)
+- JWT
+- bcrypt
 
-### Datenhaltung
-- JSON-Dateien (für Demo-Zwecke)
+### Data Storage
+- JSON files for demo purposes
 
----
+## Security
 
-## Sicherheit
+- Password hashing with bcrypt
+- JWT authentication
+- Protected routes
+- User-based access control
 
-- Passwort-Hashing mit bcrypt
-- JWT-basierte Authentifizierung
-- Geschützte API-Routen
-- Benutzerbezogene Datenzugriffe
+## Project Goal
 
----
+This project was built to demonstrate practical fullstack development skills, including authentication, API integration, route protection, state handling and structured UI development.
+
+## Future Improvements
+
+- Replace JSON storage with a real database such as PostgreSQL or MongoDB
+- Deploy frontend and backend
+- Add form validation improvements
+- Add tests
+- Improve responsive design
 
 ## Screenshots
 
-*(Hier Screenshots einfügen)*  
-- Login  
-- Patientenliste  
-- Wochenplan  
+Screenshots will be added soon.
 
----
+## Author
 
-## Installation
-
-### 1. Repository klonen
-```bash
-git clone <https://github.com/KayLir-x/medicationPlan-app.git>
+Created by Kay Liehr
