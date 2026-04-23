@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1776777186645,
+    "name": "Bernd, Musterhaus",
+    "geschlecht": "männlich",
+    "userId": 1776776977245
+  },
+  {
+    "id": 1776777214305,
+    "name": "Peter, Musterkeller",
+    "geschlecht": "männlich",
+    "userId": 1776776977245
+  },
+  {
+    "id": 1776777233687,
+    "name": "Hans, Mustermann",
+    "geschlecht": "männlich",
+    "userId": 1776776977245
+  },
+  {
+    "id": 1776777791826,
+    "name": "Bärbel; Musterfrau",
+    "geschlecht": "weiblich",
+    "userId": 1776776977245
+  },
+  {
+    "id": 1776777863723,
+    "name": "Martina,  Musterbach",
+    "geschlecht": "weiblich",
+    "userId": 1776776977245
+  },
+  {
+    "id": 1776778111448,
+    "name": "Monkia, Musterheim",
+    "geschlecht": "weiblich",
+    "userId": 1776776977245
+  }
+]

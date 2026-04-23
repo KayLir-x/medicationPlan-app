@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1776778583264,
+    "patientId": 1776777791826,
+    "medikamentName": "Medikament A",
+    "dosierung": "500mg",
+    "uhrzeit": "08:00",
+    "tage": [
+      "Dienstag"
+    ],
+    "hinweis": ""
+  },
+  {
+    "id": 1776778616970,
+    "patientId": 1776777791826,
+    "medikamentName": "med B",
+    "dosierung": "40ml",
+    "uhrzeit": "14:00",
+    "tage": [
+      "Dienstag"
+    ],
+    "hinweis": ""
+  },
+  {
+    "id": 1776778648578,
+    "patientId": 1776777791826,
+    "medikamentName": "med C",
+    "dosierung": "4 stk.",
+    "uhrzeit": "10:00",
+    "tage": [
+      "Donnerstag"
+    ],
+    "hinweis": ""
+  }
+]
