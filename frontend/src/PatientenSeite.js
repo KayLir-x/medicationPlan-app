@@ -31,7 +31,7 @@ function PatientenSeite() {
       setLoading(true);
       setFehler("");
 
-      const res = await fetch("http://localhost:5000/me/patienten", {
+      const res = await fetch("https://medicationplan-backend.onrender.com/me/patienten", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ function PatientenSeite() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/me/patienten", {
+      const res = await fetch("https://medicationplan-backend.onrender.com/me/patienten", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ function PatientenSeite() {
     if (!sicher) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/patienten/${id}`, {
+      const res = await fetch(`https://medicationplan-backend.onrender.com/patienten/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ function PatientenSeite() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/patienten/${id}`, {
+      const res = await fetch(`https://medicationplan-backend.onrender.com/patienten/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -65,7 +65,7 @@ function KalenderSeite() {
       setLoading(true);
       setFehler("");
 
-      const res = await fetch(`http://localhost:5000/einnahmeplaene/${id}`, {
+      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ function KalenderSeite() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/einnahmeplaene", {
+      const res = await fetch("https://medicationplan-backend.onrender.com/einnahmeplaene", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +149,7 @@ function KalenderSeite() {
     if (!sicher) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/einnahmeplaene/${planId}`, {
+      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${planId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -203,7 +203,7 @@ function KalenderSeite() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/einnahmeplaene/${planId}`, {
+      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${planId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
