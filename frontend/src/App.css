@@ -277,3 +277,25 @@ body {
   background: #f59e0b;
   color: white;
 }
+
+.section-title {
+  margin-top: 0;
+  color: #111827;
+  font-size: 24px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.settings-block {
+  display: grid;
+  gap: 12px;
+}
+
+.settings-block h3 {
+  margin: 0;
+  color: #1f2937;
+}

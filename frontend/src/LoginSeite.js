@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "./api";
 
 function LoginSeite() {
   const [name, setName] = useState("");
@@ -24,7 +25,7 @@ function LoginSeite() {
   try {
     setLoading(true);
 
-    const res = await fetch(`https://medicationplan-backend.onrender.com${endpoint}`, {
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

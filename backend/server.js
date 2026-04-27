@@ -96,6 +96,46 @@ function validiereGeschlecht(geschlecht) {
   return null;
 }
 
+function getStandardEinstellungen() {
+  return {
+    sprache: "de",
+    hintergrund: "medizin",
+    standardGeschlecht: "männlich"
+  };
+}
+
+function entferneSensibleUserDaten(user) {
+  return {
+    id: user.id,
+    name: user.name,
+    einstellungen: user.einstellungen || getStandardEinstellungen()
+  };
+}
+
+function validiereUserEinstellungen(einstellungen) {
+  const erlaubteSprachen = ["de", "en"];
+  const erlaubteHintergruende = ["medizin", "hell", "dunkel", "blau", "gruen"];
+  const erlaubteGeschlechter = ["männlich", "weiblich", "divers"];
+
+  if (!einstellungen) {
+    return "Einstellungen fehlen";
+  }
+
+  if (!erlaubteSprachen.includes(einstellungen.sprache)) {
+    return "Ungültige Sprache";
+  }
+
+  if (!erlaubteHintergruende.includes(einstellungen.hintergrund)) {
+    return "Ungültiger Hintergrund";
+  }
+
+  if (!erlaubteGeschlechter.includes(einstellungen.standardGeschlecht)) {
+    return "Ungültiges Standard-Geschlecht";
+  }
+
+  return null;
+}
+
 function validierePlanEingabe({ patientId, medikamentName, dosierung, uhrzeit, tage }) {
   const gueltigeTage = [
     "Montag",
@@ -173,7 +213,8 @@ app.post("/register", async (req, res) => {
   const neuerUser = {
     id: Date.now(),
     name: name.trim(),
-    passwordHash
+    passwordHash,
+    einstellungen: getStandardEinstellungen()
   };
 
   users.push(neuerUser);
@@ -223,10 +264,100 @@ app.post("/login", async (req, res) => {
   res.json({
     message: "Login erfolgreich",
     token,
-    user: {
-      id: user.id,
-      name: user.name
+    user: entferneSensibleUserDaten(user)
+  });
+});
+
+/* =========================
+   USER / EINSTELLUNGEN
+========================= */
+
+app.get("/me", authMiddleware, (req, res) => {
+  const users = leseJsonDatei("users.json");
+
+  const user = users.find((u) => Number(u.id) === Number(req.user.userId));
+
+  if (!user) {
+    return res.status(404).json({ message: "User nicht gefunden" });
+  }
+
+  if (!user.einstellungen) {
+    user.einstellungen = getStandardEinstellungen();
+    schreibeJsonDatei("users.json", users);
+  }
+
+  res.json(entferneSensibleUserDaten(user));
+});
+
+app.put("/me/profile", authMiddleware, async (req, res) => {
+  const { name, neuesPasswort } = req.body;
+
+  const users = leseJsonDatei("users.json");
+  const userIndex = users.findIndex((u) => Number(u.id) === Number(req.user.userId));
+
+  if (userIndex === -1) {
+    return res.status(404).json({ message: "User nicht gefunden" });
+  }
+
+  if (!name || name.trim().length < 3) {
+    return res.status(400).json({ message: "Name muss mindestens 3 Zeichen haben" });
+  }
+
+  const nameExistiert = users.some(
+    (u) =>
+      Number(u.id) !== Number(req.user.userId) &&
+      u.name.toLowerCase() === name.trim().toLowerCase()
+  );
+
+  if (nameExistiert) {
+    return res.status(409).json({ message: "Benutzername ist bereits vergeben" });
+  }
+
+  users[userIndex].name = name.trim();
+
+  if (neuesPasswort && neuesPasswort.trim()) {
+    if (neuesPasswort.length < 6) {
+      return res.status(400).json({ message: "Passwort muss mindestens 6 Zeichen haben" });
     }
+
+    users[userIndex].passwordHash = await bcrypt.hash(neuesPasswort, 10);
+  }
+
+  schreibeJsonDatei("users.json", users);
+
+  res.json({
+    message: "Profil aktualisiert",
+    user: entferneSensibleUserDaten(users[userIndex])
+  });
+});
+
+app.put("/me/einstellungen", authMiddleware, (req, res) => {
+  const { einstellungen } = req.body;
+
+  const validierungsfehler = validiereUserEinstellungen(einstellungen);
+
+  if (validierungsfehler) {
+    return res.status(400).json({ message: validierungsfehler });
+  }
+
+  const users = leseJsonDatei("users.json");
+  const userIndex = users.findIndex((u) => Number(u.id) === Number(req.user.userId));
+
+  if (userIndex === -1) {
+    return res.status(404).json({ message: "User nicht gefunden" });
+  }
+
+  users[userIndex].einstellungen = {
+    sprache: einstellungen.sprache,
+    hintergrund: einstellungen.hintergrund,
+    standardGeschlecht: einstellungen.standardGeschlecht
+  };
+
+  schreibeJsonDatei("users.json", users);
+
+  res.json({
+    message: "Einstellungen gespeichert",
+    user: entferneSensibleUserDaten(users[userIndex])
   });
 });
 
