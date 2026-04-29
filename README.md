@@ -58,7 +58,43 @@ This project was built to demonstrate practical fullstack development skills, in
 
 ## Screenshots
 
-Screenshots will be added soon.
+### Login
+
+Users can log in to access the protected patient management area.
+
+![Login](./screenshots/LoginSite_LOGIN.png)
+
+---
+
+### Registration Feedback
+
+After a successful registration, the app gives direct feedback to the user.
+
+![Registration](./screenshots/LoginSite_REGISTER.png)
+
+---
+
+### Patient Management
+
+Users can create patients, filter the list and open individual weekly medication plans.
+
+![Patient management](./screenshots/PatientenSite.png)
+
+---
+
+### User Settings
+
+The settings area allows users to update profile information and default preferences.
+
+![User settings](./screenshots/PatientenSite_Settings.png)
+
+---
+
+### Weekly Medication Plan
+
+Each patient has an individual weekly medication schedule with medication name, dosage and time.
+
+![Weekly medication plan](./screenshots/Wochenplan_testMedikament.png)
 
 ## Author
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { apiRequest } from "./api";
 function KalenderSeite() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,34 +59,21 @@ function KalenderSeite() {
     });
     setOffenesMenueId(null);
   };
+const ladePlaene = useCallback(async () => {
+  try {
+    setLoading(true);
+    setFehler("");
 
-  const ladePlaene = useCallback(async () => {
-    try {
-      setLoading(true);
-      setFehler("");
+    const data = await apiRequest(`/einnahmeplaene/${id}`);
 
-      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Fehler beim Laden des Wochenplans");
-      }
-
-      setPlaene(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
-      setFehler(err.message || "Unbekannter Fehler");
-    } finally {
-      setLoading(false);
-    }
-  }, [id, token]);
+    setPlaene(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error(err);
+    setFehler(err.message || "Unbekannter Fehler");
+  } finally {
+    setLoading(false);
+  }
+}, [id]);
 
   useEffect(() => {
     if (!token) {
@@ -98,144 +85,105 @@ function KalenderSeite() {
   }, [ladePlaene, navigate, token]);
 
   const planHinzufuegen = async () => {
-    setFehler("");
-    setSuccessMessage("");
+  setFehler("");
+  setSuccessMessage("");
 
-    const medikamentName = medikament.trim();
-    const dosierungWert = dosierung.trim();
+  const medikamentName = medikament.trim();
+  const dosierungWert = dosierung.trim();
 
-    if (!medikamentName || !dosierungWert || !zeit || !tag) {
-      setFehler("Bitte Medikament, Dosierung, Zeit und Tag ausfüllen.");
-      return;
-    }
+  if (!medikamentName || !dosierungWert || !zeit || !tag) {
+    setFehler("Bitte Medikament, Dosierung, Zeit und Tag ausfüllen.");
+    return;
+  }
 
-    try {
-      const res = await fetch("https://medicationplan-backend.onrender.com/einnahmeplaene", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          patientId: parseInt(id, 10),
-          medikamentName,
-          dosierung: dosierungWert,
-          uhrzeit: zeit,
-          tage: [tag],
-          hinweis: ""
-        })
-      });
+  try {
+    const data = await apiRequest("/einnahmeplaene", {
+      method: "POST",
+      body: JSON.stringify({
+        patientId: parseInt(id, 10),
+        medikamentName,
+        dosierung: dosierungWert,
+        uhrzeit: zeit,
+        tage: [tag],
+        hinweis: "",
+      }),
+    });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Eintrag konnte nicht gespeichert werden");
-      }
-
-      setPlaene((prev) => [...prev, data]);
-      formularZuruecksetzen();
-      setSuccessMessage("Eintrag erfolgreich gespeichert.");
-    } catch (err) {
-      console.error(err);
-      setFehler(err.message || "Fehler beim Speichern");
-    }
-  };
+    setPlaene((prev) => [...prev, data]);
+    formularZuruecksetzen();
+    setSuccessMessage("Eintrag erfolgreich gespeichert.");
+  } catch (err) {
+    console.error(err);
+    setFehler(err.message || "Fehler beim Speichern");
+  }
+};
 
   const deletePlan = async (planId) => {
-    setFehler("");
-    setSuccessMessage("");
+  setFehler("");
+  setSuccessMessage("");
 
-    const sicher = window.confirm("Eintrag wirklich löschen?");
-    if (!sicher) return;
+  const sicher = window.confirm("Eintrag wirklich löschen?");
+  if (!sicher) return;
 
-    try {
-      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${planId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Eintrag konnte nicht gelöscht werden");
-      }
-
-      setPlaene((prev) => prev.filter((plan) => plan.id !== planId));
-
-      if (bearbeitePlanId === planId) {
-        bearbeitungsFormZuruecksetzen();
-      }
-
-      setOffenesMenueId(null);
-      setSuccessMessage("Eintrag erfolgreich gelöscht.");
-    } catch (err) {
-      console.error(err);
-      setFehler(err.message || "Fehler beim Löschen");
-    }
-  };
-
-  const bearbeitungStarten = (eintrag, tagName) => {
-    setBearbeitePlanId(eintrag.id);
-    setBearbeitenForm({
-      medikamentName: eintrag.medikamentName || "",
-      dosierung: eintrag.dosierung || "",
-      uhrzeit: eintrag.uhrzeit || "",
-      tag: tagName || ""
+  try {
+    await apiRequest(`/einnahmeplaene/${planId}`, {
+      method: "DELETE",
     });
-    setOffenesMenueId(null);
-    setFehler("");
-    setSuccessMessage("");
-  };
 
-  const planBearbeiten = async (planId) => {
-    setFehler("");
-    setSuccessMessage("");
+    setPlaene((prev) => prev.filter((plan) => plan.id !== planId));
 
-    const medikamentName = bearbeitenForm.medikamentName.trim();
-    const dosierungWert = bearbeitenForm.dosierung.trim();
-
-    if (!medikamentName || !dosierungWert || !bearbeitenForm.uhrzeit || !bearbeitenForm.tag) {
-      setFehler("Bitte Medikament, Dosierung, Zeit und Tag ausfüllen.");
-      return;
-    }
-
-    try {
-      const res = await fetch(`https://medicationplan-backend.onrender.com/einnahmeplaene/${planId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          medikamentName,
-          dosierung: dosierungWert,
-          uhrzeit: bearbeitenForm.uhrzeit,
-          tage: [bearbeitenForm.tag],
-          hinweis: ""
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Eintrag konnte nicht bearbeitet werden");
-      }
-
-      setPlaene((prev) =>
-        prev.map((plan) => (plan.id === planId ? data : plan))
-      );
-
+    if (bearbeitePlanId === planId) {
       bearbeitungsFormZuruecksetzen();
-      setSuccessMessage("Eintrag erfolgreich aktualisiert.");
-    } catch (err) {
-      console.error(err);
-      setFehler(err.message || "Fehler beim Bearbeiten");
     }
-  };
 
+    setOffenesMenueId(null);
+    setSuccessMessage("Eintrag erfolgreich gelöscht.");
+  } catch (err) {
+    console.error(err);
+    setFehler(err.message || "Fehler beim Löschen");
+  }
+};
+
+ const planBearbeiten = async (planId) => {
+  setFehler("");
+  setSuccessMessage("");
+
+  const medikamentName = bearbeitenForm.medikamentName.trim();
+  const dosierungWert = bearbeitenForm.dosierung.trim();
+
+  if (
+    !medikamentName ||
+    !dosierungWert ||
+    !bearbeitenForm.uhrzeit ||
+    !bearbeitenForm.tag
+  ) {
+    setFehler("Bitte Medikament, Dosierung, Zeit und Tag ausfüllen.");
+    return;
+  }
+
+  try {
+    const data = await apiRequest(`/einnahmeplaene/${planId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        medikamentName,
+        dosierung: dosierungWert,
+        uhrzeit: bearbeitenForm.uhrzeit,
+        tage: [bearbeitenForm.tag],
+        hinweis: "",
+      }),
+    });
+
+    setPlaene((prev) =>
+      prev.map((plan) => (plan.id === planId ? data : plan))
+    );
+
+    bearbeitungsFormZuruecksetzen();
+    setSuccessMessage("Eintrag erfolgreich aktualisiert.");
+  } catch (err) {
+    console.error(err);
+    setFehler(err.message || "Fehler beim Bearbeiten");
+  }
+};
   const wochenplan = useMemo(() => {
     const plan = {};
 
@@ -468,7 +416,7 @@ function KalenderSeite() {
                               <div className="action-menu glass-card">
                                 <button
                                   className="button button-secondary button-full"
-                                  onClick={() => bearbeitungStarten(eintrag, tagName)}
+                                  onClick={() => bearbeitenForm(eintrag,tagName)}
                                 >
                                   Eintrag ändern
                                 </button>
