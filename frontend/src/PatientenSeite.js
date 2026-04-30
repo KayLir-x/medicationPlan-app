@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "./api";
+import { BACKGROUND_OPTIONS, getBackgroundStyle } from "./backgroundOptions";
 
 function PatientenSeite() {
   const [patienten, setPatienten] = useState([]);
@@ -233,7 +234,7 @@ function PatientenSeite() {
     .sort((a, b) => a.name.localeCompare(b.name, "de"));
 
   return (
-    <div className="page-bg">
+    <div className="page-bg" style={getBackgroundStyle(hintergrund)}>
       <div style={{ marginBottom: "30px" }}>
         <h1 className="page-title">Patienten</h1>
         <p className="page-subtitle">
@@ -308,11 +309,11 @@ function PatientenSeite() {
                   value={hintergrund}
                   onChange={(e) => setHintergrund(e.target.value)}
                 >
-                  <option value="medizin">Hintergrund: Medizin</option>
-                  <option value="hell">Hintergrund: Hell</option>
-                  <option value="dunkel">Hintergrund: Dunkel</option>
-                  <option value="blau">Hintergrund: Blau</option>
-                  <option value="gruen">Hintergrund: Grün</option>
+                  {BACKGROUND_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      Hintergrund: {option.label}
+                    </option>
+                  ))}
                 </select>
 
                 <button className="button button-primary" onClick={einstellungenSpeichern}>
@@ -499,9 +500,9 @@ function PatientenSeite() {
             })}
           </div>
         )}
-        </div>
       </div>
-      );
+    </div>
+  );
 }
 
-      export default PatientenSeite;
+export default PatientenSeite;

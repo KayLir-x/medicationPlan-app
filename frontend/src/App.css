@@ -12,7 +12,7 @@ body {
   padding: 40px;
   background-image:
     linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
-    url('/public/MedizinApp/freepik_login.png');
+    url('/public/MedizinApp/login_screen.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -23,7 +23,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('/public/MedizinApp/freepik_login.png');
+  background-image: url('/public/MedizinApp/login_screen.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

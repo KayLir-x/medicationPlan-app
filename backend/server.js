@@ -114,7 +114,15 @@ function entferneSensibleUserDaten(user) {
 
 function validiereUserEinstellungen(einstellungen) {
   const erlaubteSprachen = ["de", "en"];
-  const erlaubteHintergruende = ["medizin", "hell", "dunkel", "blau", "gruen"];
+  const erlaubteHintergruende = ["login",
+    "bubbles",
+    "drops",
+    "galaxy",
+    "no-tree",
+    "no-tree-blur",
+    "pink-moon",
+    "sky",
+    "space",];
   const erlaubteGeschlechter = ["männlich", "weiblich", "divers"];
 
   if (!einstellungen) {
